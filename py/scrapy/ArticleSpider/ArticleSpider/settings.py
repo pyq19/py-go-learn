@@ -81,6 +81,14 @@ IMAGES_URLS_FIELD = 'front_image_url' # 配置哪个字段是image url
 project_dir = os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE = os.path.join(project_dir, 'images')# 设置图片保存路径
 
+import os, sys
+# 1. sys.path.insert(0, '/Users/Mccree/p/py-go-learn/py/scrapy/ArticleSpider/ArticleSpider')
+# 2. sys.path.insert(0, os.path.join(project_dir, 'ArticleSpider'))
+# 3.
+BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+# print(BASE_DIR)
+sys.path.insert(0, os.path.join(BASE_DIR, 'ArticleSpider'))
+
 # IMAGES_MIN_HEIGHT = 100
 # IMAGES_MIN_WIDTH = 100 # 图片最小宽高
 

@@ -1,0 +1,23 @@
+package main
+
+import "fmt"
+
+
+type User struct {
+    id int
+    name string
+}
+
+
+func main() {
+    u := User{1, "Tom"}
+    var i interface{} = u
+
+    u.id = 2
+    u.name = "jack"
+
+    fmt.Printf("%v\n", u)
+    fmt.Printf("%v\n", i.(User))
+}
+// {2 jack}
+// {1 Tom}
