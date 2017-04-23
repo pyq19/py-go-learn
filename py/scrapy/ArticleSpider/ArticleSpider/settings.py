@@ -77,7 +77,7 @@ ITEM_PIPELINES = {
 #    'ArticleSpider.pipelines.MySQLPipeline': 1,
     'ArticleSpider.pipelines.MySQLTwistedPipeline': 1,
 }
-IMAGES_URLS_FIELD = 'front_image_url' # 配置哪个字段是image url
+IMAGES_URLS_FIELD = 'front_image_url' # 配置哪个字段是image url，就会从Item 里面找这个字段
 project_dir = os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE = os.path.join(project_dir, 'images')# 设置图片保存路径
 

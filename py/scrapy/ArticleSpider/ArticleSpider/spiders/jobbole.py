@@ -3,8 +3,8 @@ import re
 import scrapy
 import datetime
 
-from scrapy.http import Request
-from urllib import parse
+from scrapy.http import Request # 将这个Request 对象交给scrapy
+from urllib import parse # 对url 进行拼接yield Request(url=parse.urljoin(response.url, post_url), callback=..)
 from scrapy.loader import ItemLoader
 
 from ArticleSpider.items import JobBoleArticleItem, ArticleItemLoader
@@ -22,6 +22,13 @@ class JobboleSpider(scrapy.Spider):
         1 获取文章列表页中的文章url并交给scrapy下载后，进行解析
         2 获取下一页的URL并交给scrapy进行下载，下载完成后交给parse函数循环第一步
         """
+
+        # re_selector = response.xpath('//*[@id="post-110287"]/div[1]/h1')
+        # re_selector = response.xpath('//*[@id="post-110287"]/div[1]/h1/text()') # 加text()!
+        # title = response.xpath('//div[@class='entry-header']/h1/text()') # title 是个selector 方法, 可以进一步调用
+        # title.extract() # ['....']
+        # title.extract()[1] # '....'.strip().replace('aaa', '')
+
 
         # 解析列表页中的所有文章url并交给srapy下载后，进行解析
 #        post_urls = response.css("#archive .floated-thumb .post-thumb a::attr(href)").extract()
@@ -117,6 +124,7 @@ class JobboleSpider(scrapy.Spider):
 ##        front_image_path = response.css().extract() # !!!
 #        print('css------>', title, create_time, praise_nums, fav_nums, comment_nums, tags)
 #
+##        article_time 在函数第一行article_item = JobBoleArticleItem()
 #        article_item['url_object_id'] = get_md5(response.url)
 #        article_item['title'] = title
 #        article_item['url'] = response.url
@@ -134,13 +142,14 @@ class JobboleSpider(scrapy.Spider):
 #        article_item['content'] = content
 
         
+        # from scrapy.loader import ItemLoader
         # !!!!! 通过ItemLoader加载item
         # item_loader.add_xpath()
         # item_loader = ItemLoader(item=JobBoleArticleItem(), response=response)
         # 这里的ItemLoader换成自定义的ArticleItemLoader，要从ArticleSpider/items.py里导入
         front_image_url = response.meta.get('front_image_url', '') # 文章封面图
         item_loader = ArticleItemLoader(item=JobBoleArticleItem(), response=response)
-        item_loader.add_css('title', '.entry-header h1::text')
+        item_loader.add_css('title', '.entry-header h1::text') # title 对应的提取样式
         item_loader.add_value('url', response.url)
         item_loader.add_value('url_object_id', get_md5(response.url))
         item_loader.add_css('create_time', 'p.entry-meta-hide-on-mobile::text')
@@ -151,6 +160,6 @@ class JobboleSpider(scrapy.Spider):
         item_loader.add_css('tags', 'p.entry-meta-hide-on-mobile a::text')
         item_loader.add_css('content', 'div.entry')
 
-        article_item = item_loader.load_item()
+        article_item = item_loader.load_item() # 调用load_item() 才会应用前面的规则解析生成item 对象
         print(article_item, '***^^^' * 30)
         yield article_item # 调用yield之后会传递到pipelines.py
