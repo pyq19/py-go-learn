@@ -1,0 +1,4 @@
+You can run Python with the -u flag to avoid output buffering:
+    nohup python -u ./dolog.py > my.log &
+    tail -f my.log
+nohup python -u ./dolog.py > my.log &| tail -f my.log
