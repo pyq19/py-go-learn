@@ -1,0 +1,7 @@
+>>> from init import b
+this is __init__
+bbbb
+>>> from init import b
+>>> from init import b
+
+
