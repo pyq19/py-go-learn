@@ -17,3 +17,18 @@ t[object()]
 # <type 'tuple'>   (1, 'b', 3.0)
 # <type 'slice'>   slice('a', 'z', 3)
 # <type 'object'>  <object object at 0x1035b50f0>
+
+
+class Indexer:
+    def __getitem__(self, index):
+        return index ** 2
+x = Indexer()
+print x[2]      # x[i] calls __getitem__(x, i)
+for i in xrange(5):
+    print x[i]
+# 4
+# 0
+# 1
+# 4
+# 9
+# 16

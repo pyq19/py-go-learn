@@ -27,6 +27,7 @@ class TestSpider(unittest.TestCase):
         # self.tree = etree.parse(StringIO(text))
         self.tree = html.fromstring(text)
         self.article = article
+        self.urls = []
 
     def tearDown(self):
         pass
@@ -63,12 +64,16 @@ class TestSpider(unittest.TestCase):
         pass
 
     def test__get_all_urls(self):
+        """[{'title':'xxx', 'link':'http...'},{...},...]"""
+        _names, _links = [], []
         for name in self.tree.xpath('/html/body/div[2]/div[2]/ul/li[*]/a/text()'):
-            print('-->', name)
-        
+            _names.append(name)
         for link in self.tree.xpath('/html/body/div[2]/div[2]/ul/li[*]/a//@href'):
-            print('==>', link)
-
+            _links.append(link)
+        tem = dict(zip(_names, _links))
+        for n, l in tem.items():
+            self.urls.append({'title': n, 'link': l})
+        
     # def test__save_html_to_file(self):
     #     req = requests.get('http://www.cq.gov.cn/today/news/2017/5/5/1500624.shtml')
     #     req.encoding = 'utf-8'
@@ -76,10 +81,19 @@ class TestSpider(unittest.TestCase):
     #     with open('article.html', 'w') as f:
     #         f.write(text)
 
-    # TODO
+    def test__get_complete_url(self):
+        """ res = 'http://cq.gov.cn/today/22.shtml' """
+        ts = [{'link': '/today/0.shtml', 'title': 'TTT'},\
+          {'link': '/today/22.shtml', 'title': '重庆'}]
+        host = 'http://cq.gov.cn/'
+        for dic in ts:
+            _link = dic['link']
+            if _link.startswith('/'):
+                dic['link'] = host + _link[1:]
+
     def test__get_article_detail(self):
         article_tree = html.fromstring(self.article)
-        #title = article_tree.xpath(
+        # title = article_tree.xpath(
         content = ''
         time = ''
 
