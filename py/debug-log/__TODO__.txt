@@ -1,0 +1,30 @@
+装饰器
+
+打印 函数参数
+
+打印 断点
+
+打印 return 返回值
+
+🌰
+@debug
+def test(self, a, b):
+    
+    self.ss = asd
+    
+    debug(self.ss)
+
+    return ['asd', 123]
+
+输出
+[func]
+    name -> test
+[args] 
+    self -> asdadsa
+    a    -> asdasd
+    b    -> asdadsasda
+[break point] 
+    self.ss -> asdad
+[return]
+    -> ['asd', 123]
+
