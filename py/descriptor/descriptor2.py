@@ -117,6 +117,11 @@ print(s.name)
 # {'name': 'asd', 'shares': 11, 'price': 1.1}
 # asd
 
+print('=' * 30)
+# print(hasattr(s, 'name')) # True
+print(getattr(s, 'name'))
+print('=' * 30)
+
 s = Stock(**{'name': 'HHH', 'shares': 321, 'price': 2.2})
 print(s.name)
 # {'name': 'HHH', 'shares': 321, 'price': 2.2}

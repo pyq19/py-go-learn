@@ -1,0 +1,8 @@
+将数据（str/ unicode/ dict）传入JsonObject 
+	data = 	1. {'a': 1}
+			2. '{"a": 1}'
+
+	json_obj = JsonObject(data)
+	json_obj.to_string   # '{"a": 1}'
+	json_obj.to_dict     # {u'a': 1}
+
