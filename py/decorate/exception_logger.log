@@ -1,0 +1,7 @@
+2017-06-23 14:52:15,481 - example_logger - ERROR - there was an exception in zero_divide
+Traceback (most recent call last):
+  File "exception_logger.py", line 39, in wrapper
+    return func(*args, **kwargs)
+  File "exception_logger.py", line 53, in zero_divide
+    1 / 0
+ZeroDivisionError: integer division or modulo by zero

@@ -1,0 +1,63 @@
+# http://www.jianshu.com/p/51a885f55a61
+
+---
+- martin:
+    name: Martin Developer
+    job: developer
+    skills:
+        - python
+        - perl
+        - pascal
+- tabitha:
+    name: Tabitha Bitumen
+    job: operation
+    skills:
+        - lisp
+        - fortran
+        - erlang
+
+
+# [
+#   {
+#     "martin": {
+#       "name": "Martin Developer",
+#       "job": "developer",
+#       "skills": [
+#         "python",
+#         "perl",
+#         "pascal"
+#       ]
+#     }
+#   },
+#   {
+#     "tabitha": {
+#       "name": "Tabitha Bitumen",
+#       "job": "operation",
+#       "skills": [
+#         "lisp",
+#         "fortran",
+#         "erlang"
+#       ]
+#     }
+#   }
+# ]
+
+
+number: 12
+float: 12.30
+
+
+# {
+#   "number": 12,
+#   "float": 12.3
+# }
+
+
+# 转换数据类型
+e: !!str 123
+f: !!str true
+
+# {
+#   "e": "123",
+#   "f": "true"
+# }

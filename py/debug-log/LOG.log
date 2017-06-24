@@ -1,0 +1,4 @@
+2017-06-23 11:15:20,820 log_.py [line:32] WARNING:warn message
+2017-06-23 11:15:20,821 log_.py [line:33] INFO:info message
+2017-06-23 11:15:31,891 log_.py [line:32] WARNING:warn message
+2017-06-23 11:15:31,891 log_.py [line:33] INFO:info message
