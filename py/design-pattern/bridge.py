@@ -11,7 +11,7 @@ class Bridge(object):
         raise NotImplemented()
 
 
-class UseCasel(Bridge):
+class UseCase1(Bridge):
     # 根据初始化参数传入实现的产品类
     def __init__(self, implementation):
         self.__implementation = implementation
@@ -37,7 +37,40 @@ class ImplementationInterface:
         raise NotImplemented
 
 
-# TODO 
 # 这里其实才是实现的产品类
-class Linux:
-    pass
+class Linux(ImplementationInterface):
+    # 它定义了这个方法，回应操作系统的名字
+    def anotherFunctionality(self):
+        print 'linux yoooo'
+
+
+class Windows(ImplementationInterface):
+    
+    def anotherFunctionality(self):
+        print 'windows ..'
+
+
+def main():
+    linux = Linux()
+    windows = Windows()
+
+    useCase = UseCase1(linux)
+    useCase.someFunctionality()
+
+    useCase = UseCase1(windows)
+    useCase.someFunctionality()
+
+    useCase = UseCase2(linux)
+    useCase.someFunctionality()
+
+    useCase = UseCase2(windows)
+    useCase.someFunctionality()
+
+
+if __name__ == '__main__':
+    main()
+
+# UseCase1:  linux yoooo
+# UseCase1:  windows ..
+# UseCase2 : linux yoooo
+# UseCase2 : windows ..
