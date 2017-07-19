@@ -1,0 +1,5 @@
+
+
+
+class MultiValueDict(dict):
+    pass
