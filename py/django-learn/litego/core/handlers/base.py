@@ -25,7 +25,7 @@ class BaseHandler(object):
         if settings.MIDDLEWARE is None:
             handler = convert_exception_to_response(self._legacy_get_response)
         else:
-            handler = None # TODO
+            handler = convert_exception_to_response(self._get_response)
 
 
         self._middleware_chain = handler
@@ -54,7 +54,39 @@ class BaseHandler(object):
             pass # TODO
 
     def _get_response(self, request):
-        pass
+        ''' resolve and call the view, then apply view, exception, and
+            template_response middleware. This method is everything that happens
+            inside the request/response middleware. '''
+        response = None
+
+        if hasattr(request, 'urlconf'):
+            urlconf = request.urlconf
+            set_urlconf(urlconf)
+            resolver = get_resolver(urlconf)
+        else:
+            resolver = get_resolver()
+
+        resolver_match = resolver.resolve(request.path_info)
+        callback, callback_args, callback_kwargs = resolver_match
+        request.resolver_match = resolver_match
+
+        # apply view middleware
+        for middleware_method in self._view_middleware:
+            pass
+        # complain if the view return None (a common error)
+        if response is None:
+            pass
+        # if the response supports deferred rendering, apply template
+        # response middleware and then render the response.
+        elif hasattr(response, 'render') and callable(response.render):
+            for middleware_method in self._template_response_middleware:
+                pass
+            try:
+                response = response.render()
+            except Exception as e:
+                response = self.process_exception_by_middleware(e, request)
+
+        return response
 
     def process_exception_by_middleware(self, exception, request):
         pass
