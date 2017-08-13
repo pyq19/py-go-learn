@@ -55,28 +55,22 @@ def get(path):
     s.send(request.encode())
 
     chunks = []
-    callback = lambda: readable(s, chunks)
-    f = Future()
-    f.callbacks.append(callback)
-    selector.register(s.fileno(), EVENT_READ, data=f)
 
-
-def readable(s, chunks):
-    global n_tasks
-
-    # s is readable
-    selector.unregister(s.fileno())
-    chunk = s.recv(1000)
-    if chunk:
-        chunks.append(chunk)
-        callback = lambda: readable(s, chunks)
+    while True:
         f = Future()
-        f.callbacks.append(callback)
         selector.register(s.fileno(), EVENT_READ, data=f)
-    else:
-        body = (b''.join(chunks)).decode()
-        print(body.split('\n')[0])
-        n_tasks -= 1
+        yield f
+        # by now, s is readable
+        selector.unregister(s.fileno())
+        chunk = s.recv(1000)
+        if chunk:
+            chunks.append(chunk)
+        else:
+            # we're done
+            body = (b''.join(chunks)).decode()
+            print(body.split('\n')[0])
+            n_tasks -= 1
+            return
 
 
 start = time.time()
