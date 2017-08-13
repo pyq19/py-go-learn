@@ -57,6 +57,8 @@ def readable(s, chunks):
 start = time.time()
 get('/foo')
 get('/foo')
+get('/bar')
+get('/bar')
 
 while n_tasks:
     events = selector.select()
