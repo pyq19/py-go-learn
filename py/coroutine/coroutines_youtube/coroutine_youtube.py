@@ -11,6 +11,15 @@ selector = DefaultSelector()
 n_tasks = 0
 
 
+class Future(object):
+    def __init__(self):
+        self.callbacks = []
+
+    def resolve(self):
+        for c in self.callbacks:
+            c()
+
+
 def get(path):
     global n_tasks
     n_tasks += 1
@@ -24,7 +33,9 @@ def get(path):
     request = 'GET %s HTTP/1.0\r\n\r\n' % path
 
     callback = lambda: connected(s, request)
-    selector.register(s.fileno(), EVENT_WRITE, data=callback)
+    f = Future()
+    f.callbacks.append(callback)
+    selector.register(s.fileno(), EVENT_WRITE, data=f)
 
 
 def connected(s, request):
@@ -34,7 +45,9 @@ def connected(s, request):
 
     chunks = []
     callback = lambda: readable(s, chunks)
-    selector.register(s.fileno(), EVENT_READ, data=callback)
+    f = Future()
+    f.callbacks.append(callback)
+    selector.register(s.fileno(), EVENT_READ, data=f)
 
 
 def readable(s, chunks):
@@ -46,7 +59,9 @@ def readable(s, chunks):
     if chunk:
         chunks.append(chunk)
         callback = lambda: readable(s, chunks)
-        selector.register(s.fileno(), EVENT_READ, data=callback)
+        f = Future()
+        f.callbacks.append(callback)
+        selector.register(s.fileno(), EVENT_READ, data=f)
     else:
         body = (b''.join(chunks)).decode()
         print(body.split('\n')[0])
@@ -62,7 +77,7 @@ get('/bar')
 while n_tasks:
     events = selector.select()
     for event, mask in events:
-        cb = event.data
-        cb()
+        fut = event.data
+        fut.resolve()
 
 print('took %.1f sec' % (time.time() - start))
