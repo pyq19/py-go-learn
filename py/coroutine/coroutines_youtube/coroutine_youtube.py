@@ -20,6 +20,19 @@ class Future(object):
             c()
 
 
+class Task(object):
+    def __init__(self, gen):
+        self.gen = gen
+        self.step()
+
+    def step(self):
+        try:
+            f = next(self.gen)
+        except StopIteration:
+            return
+        f.callbacks.append(self.step)
+
+
 def get(path):
     global n_tasks
     n_tasks += 1
@@ -32,13 +45,11 @@ def get(path):
 
     request = 'GET %s HTTP/1.0\r\n\r\n' % path
 
-    callback = lambda: connected(s, request)
     f = Future()
-    f.callbacks.append(callback)
     selector.register(s.fileno(), EVENT_WRITE, data=f)
 
-
-def connected(s, request):
+    # need to pause until s is writable...
+    yield f
     selector.unregister(s.fileno())
     # s is writeable
     s.send(request.encode())
@@ -69,10 +80,8 @@ def readable(s, chunks):
 
 
 start = time.time()
-get('/foo')
-get('/foo')
-get('/bar')
-get('/bar')
+Task(get('/foo'))
+Task(get('/foo'))
 
 while n_tasks:
     events = selector.select()
