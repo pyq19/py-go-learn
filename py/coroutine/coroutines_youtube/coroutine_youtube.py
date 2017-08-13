@@ -25,7 +25,6 @@ def get(path):
 
     callback = lambda: connected(s, request)
     selector.register(s.fileno(), EVENT_WRITE, data=callback)
-    selector.select()
 
 
 def connected(s, request):
